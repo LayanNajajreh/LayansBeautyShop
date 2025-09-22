@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنتجات - متجر ليان للجمال</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>متجر ليان</h2>
+                <span>Layan's Beauty Shop</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">الرئيسية</a>
+                </li>
+                <li class="nav-item">
+                    <a href="products.html" class="nav-link active">المنتجات</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">من نحن</a>
+                </li>
+                <li class="nav-item">
+                    <a href="contact.html" class="nav-link">تواصل معنا</a>
+                </li>
+            </ul>
+            <div class="nav-icons">
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Products Hero -->
+    <section class="products-hero">
+        <div class="container">
+            <h1>جميع المنتجات</h1>
+            <p>اكتشفي مجموعتنا الكاملة من منتجات التجميل والعناية</p>
+        </div>
+    </section>
+
+    <!-- Product Filters -->
+    <section class="product-filters">
+        <div class="container">
+            <h2>تصفيه حسب الفئة</h2>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterProducts('الكل')">الكل</button>
+                <button class="filter-btn" onclick="filterProducts('وجه')">وجه</button>
+                <button class="filter-btn" onclick="filterProducts('بلاشر')">بلاشر</button>
+                <button class="filter-btn" onclick="filterProducts('برونزر')">برونزر</button>
+                <button class="filter-btn" onclick="filterProducts('هايلايتر')">هايلايتر</button>
+                <button class="filter-btn" onclick="filterProducts('عيون')">عيون</button>
+                <button class="filter-btn" onclick="filterProducts('شفاه')">شفاه</button>
+                <button class="filter-btn" onclick="filterProducts('محدد شفاه')">محدد شفاه</button>
+                <button class="filter-btn" onclick="filterProducts('فراشي')">فراشي</button>
+                <button class="filter-btn" onclick="filterProducts('سبراي تثبيت')">سبراي تثبيت</button>
+                <button class="filter-btn" onclick="filterProducts('العناية بالبشرة')">العناية بالبشرة</button>
+                <button class="filter-btn" onclick="filterProducts('كريمات الجسم')">كريمات الجسم</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- All Products -->
+    <section class="all-products">
+        <div class="container">
+            <div class="products-grid" id="allProducts">
+                <!-- Products will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>سلة التسوق</h3>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>المجموع: <span id="cartTotal">0</span> شيقل</strong>
+            </div>
+            <button class="checkout-btn" onclick="showContactMessage()">إتمام الطلب</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>متجر ليان للجمال</h3>
+                    <p>وجهتكِ الأولى لمنتجات التجميل والعناية بالبشرة</p>
+                </div>
+                <div class="footer-section">
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="products.html">المنتجات</a></li>
+                        <li><a href="about.html">من نحن</a></li>
+                        <li><a href="contact.html">تواصل معنا</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>تابعينا</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/layansbeautyshop/"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@layansbeautyshop"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 متجر ليان للجمال. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <style>
+        /* Products page specific styles */
+        .products-hero {
+            margin-top: 100px;
+            padding: 80px 0;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            text-align: center;
+            color: white;
+        }
+
+        .products-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .products-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .product-filters {
+            padding: 50px 0;
+            background: white;
+        }
+
+        .product-filters h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #ff1493;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 2px solid #ff1493;
+            color: #ff1493;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #ff1493;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .all-products {
+            padding: 50px 0 80px;
+            background: linear-gradient(135deg, #ffeef8, #fff0f5);
+        }
+
+        .product-category {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff69b4, #ffb6c1);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .products-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .filter-buttons {
+                gap: 10px;
+            }
+
+            .filter-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</body>
+</html>
