@@ -5,24 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تفاصيل المنتج - متجر ليان للجمال</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
                 <h2>متجر ليان</h2>
                 <span>Layan's Beauty Shop</span>
             </div>
-       <ul class="nav-links" id="navLinks">
-    <li><a href="index.html">الرئيسية</a></li>
-    <li><a href="products.html">المنتجات</a></li>
-    <li><a href="delivery.html">التوصيل</a></li>
-    <li><a href="about.html">من نحن</a></li>
-    <li><a href="contact.html">تواصلي معنا</a></li>
-</ul>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">الرئيسية</a></li>
+                <li><a href="products.html">المنتجات</a></li>
+                <li><a href="delivery.html">التوصيل</a></li>
+                <li><a href="about.html">من نحن</a></li>
+                <li><a href="contact.html">تواصلي معنا</a></li>
+            </ul>
             <div class="nav-icons">
                 <div class="cart-icon" onclick="toggleCart()">
                     <i class="fas fa-shopping-bag"></i>
@@ -50,54 +50,30 @@
         </div>
     </section>
 
-   <!-- Products Section -->
-<section class="products-section" style="margin-top: 120px; padding: 40px 0;">
-    <div class="container">
-        <h1 style="text-align: center; color: #ff1493; margin-bottom: 40px;">منتجاتنا</h1>
-        
-        <!-- Filter Buttons -->
-        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 40px;">
-            <button class="filter-btn active" onclick="filterProducts('الكل')">الكل</button>
-            <button class="filter-btn" onclick="filterProducts('بلاشر')">بلاشر</button>
-            <button class="filter-btn" onclick="filterProducts('برونزر')">برونزر</button>
-            <button class="filter-btn" onclick="filterProducts('عيون')">عيون</button>
-            <button class="filter-btn" onclick="filterProducts('شفاه')">شفاه</button>
-        </div>
-        
-        <!-- Products Grid -->
-        <div class="products-grid" id="allProducts">
-            <!-- Products loaded by JavaScript -->
-        </div>
-    </div>
-</section>
-    
-
-    <!-- Cart Sidebar -->
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>سلة التسوق</h3>
-            <button class="close-cart" onclick="toggleCart()">×</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <!-- Cart items will be added here -->
-        </div>
-        <div class="cart-footer">
-            <div class="cart-total">
-                <strong>المجموع: <span id="cartTotal">0</span> شيقل</strong>
+    <!-- Shopping Cart -->
+    <div class="cart-overlay" id="cartOverlay">
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h3>حقيبة التسوق</h3>
+                <button class="close-cart" onclick="toggleCart()">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="delivery-info" id="deliveryInfo" style="display: none;">
-                <p>التوصيل: <span id="deliveryPrice">0</span> شيقل</p>
-                <p><strong>المجموع النهائي: <span id="finalTotal">0</span> شيقل</strong></p>
+            <div class="cart-items" id="cartItems">
+                <p class="empty-cart">حقيبة التسوق فارغة</p>
             </div>
-            <button class="checkout-btn" onclick="showContactMessage()">إتمام الطلب</button>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <strong>المجموع: <span id="cartTotal">0</span> شيقل</strong>
+                </div>
+                <button class="checkout-btn" onclick="showContactMessage()">إتمام الطلب</button>
+            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
         let selectedShade = null;
-        let selectedDelivery = null;
-        let deliveryPrice = 0;
 
         function loadProductDetail() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -159,13 +135,8 @@
         function selectShade(shade, index) {
             selectedShade = shade;
             
-            // Remove active class from all shade buttons
             document.querySelectorAll('.shade-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Add active class to selected shade
             document.getElementById(`shade-${index}`).classList.add('active');
-            
-            // Hide the note
             document.querySelector('.shade-note').style.display = 'none';
         }
 
@@ -191,7 +162,6 @@
             if (product) {
                 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
                 
-                // Check if same product with same shade exists
                 const existingItem = cart.find(item => item.id === productId && item.selectedShade === selectedShade);
                 
                 if (existingItem) {
@@ -210,37 +180,10 @@
             }
         }
 
-        function selectDelivery(type, price) {
-            selectedDelivery = type;
-            deliveryPrice = price;
-            
-            // Remove active class from all delivery options
-            document.querySelectorAll('.delivery-option').forEach(option => option.classList.remove('active'));
-            document.querySelectorAll('.delivery-check').forEach(check => check.style.display = 'none');
-            
-            // Add active class to selected delivery
-            document.querySelector(`[onclick="selectDelivery('${type}', ${price})"]`).classList.add('active');
-            document.getElementById(`${type}-check`).style.display = 'flex';
-            
-            // Show delivery info in cart
-            document.getElementById('deliveryInfo').style.display = 'block';
-            document.getElementById('deliveryPrice').textContent = price;
-            
-            // Update final total
-            updateFinalTotal();
-        }
-
-        function updateFinalTotal() {
-            const cartTotal = parseInt(document.getElementById('cartTotal').textContent || 0);
-            const finalTotal = cartTotal + deliveryPrice;
-            document.getElementById('finalTotal').textContent = finalTotal;
-        }
-
         function goBack() {
             window.history.back();
         }
 
-        // Load product on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadProductDetail();
             updateCart();
@@ -415,102 +358,6 @@
             box-shadow: 0 10px 25px rgba(255, 20, 147, 0.3);
         }
 
-        /* Delivery Section */
-        .delivery-section {
-            padding: 50px 0;
-            background: linear-gradient(135deg, #ffeef8, #fff0f5);
-        }
-
-        .delivery-section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #ff1493;
-            margin-bottom: 40px;
-            font-weight: 700;
-        }
-
-        .delivery-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .delivery-option {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            position: relative;
-        }
-
-        .delivery-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.1);
-            border-color: #ff69b4;
-        }
-
-        .delivery-option.active {
-            background: linear-gradient(135deg, #ffeef8, #fff0f5);
-            border-color: #ff1493;
-        }
-
-        .delivery-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff1493, #ff69b4);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .delivery-info h3 {
-            color: #333;
-            margin-bottom: 5px;
-            font-size: 1.2rem;
-        }
-
-        .delivery-info p {
-            color: #ff1493;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-bottom: 3px;
-        }
-
-        .delivery-time {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .delivery-check {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 30px;
-            height: 30px;
-            background: #28a745;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .delivery-info {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
         @media (max-width: 768px) {
             .product-detail-grid {
                 grid-template-columns: 1fr;
@@ -528,15 +375,6 @@
 
             .shades-grid {
                 justify-content: center;
-            }
-
-            .delivery-options {
-                grid-template-columns: 1fr;
-            }
-
-            .delivery-option {
-                flex-direction: column;
-                text-align: center;
             }
         }
     </style>

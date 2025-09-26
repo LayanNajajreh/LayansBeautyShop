@@ -1,5 +1,4 @@
 // Sample products data
-// Updated products with new categories and shades
 const products = [
     // Face Products
     {
@@ -20,8 +19,6 @@ const products = [
         category: "وجه",
         shades: ["شفاف", "فاتح", "متوسط", "داكن"]
     },
-    
-    // Blushes
     {
         id: 3,
         name: "أحمر خدود NARS",
@@ -40,8 +37,6 @@ const products = [
         category: "بلاشر",
         shades: ["وردي طبيعي", "خوخي دافئ", "توتي"]
     },
-    
-    // Bronzers
     {
         id: 5,
         name: "برونزر Too Faced",
@@ -51,8 +46,6 @@ const products = [
         category: "برونزر",
         shades: ["فاتح", "متوسط", "داكن"]
     },
-    
-    // Highlighters
     {
         id: 6,
         name: "هايلايتر Fenty Beauty",
@@ -62,8 +55,6 @@ const products = [
         category: "هايلايتر",
         shades: ["ذهبي فاتح", "ذهبي داكن", "وردي", "شمبانيا"]
     },
-    
-    // Eyes
     {
         id: 7,
         name: "ماسكارا Benefit",
@@ -82,8 +73,6 @@ const products = [
         category: "عيون",
         shades: ["نود", "دخاني", "ملون"]
     },
-    
-    // Lips
     {
         id: 9,
         name: "أحمر شفاه MAC",
@@ -111,8 +100,6 @@ const products = [
         category: "شفاه",
         shades: ["شفاف", "وردي فاتح", "خوخي", "ذهبي"]
     },
-    
-    // Brushes
     {
         id: 12,
         name: "فرشاة كريم الأساس",
@@ -131,8 +118,6 @@ const products = [
         category: "فراشي",
         shades: ["مجموعة كاملة"]
     },
-    
-    // Setting Sprays
     {
         id: 14,
         name: "سبراي تثبيت Urban Decay",
@@ -142,8 +127,6 @@ const products = [
         category: "سبراي تثبيت",
         shades: ["واحد"]
     },
-    
-    // Skincare
     {
         id: 15,
         name: "سيروم فيتامين سي",
@@ -162,8 +145,6 @@ const products = [
         category: "العناية بالبشرة",
         shades: ["واحد"]
     },
-    
-    // Body Creams
     {
         id: 17,
         name: "كريم الجسم Bath & Body Works",
@@ -184,26 +165,15 @@ const products = [
     }
 ];
 
-// Updated filter categories
-const categories = [
-    "الكل",
-    "وجه", 
-    "بلاشر", 
-    "برونزر", 
-    "هايلايتر", 
-    "عيون", 
-    "شفاه", 
-    "محدد شفاه", 
-    "فراشي", 
-    "سبراي تثبيت", 
-    "العناية بالبشرة", 
-    "كريمات الجسم"
-];
+// Get all products function
+function getAllProducts() {
+    return products;
+}
 
-// Update the product card HTML to include shades
+// Updated createProductCard function - now clickable
 function createProductCard(product) {
     return `
-        <div class="product-card">
+        <div class="product-card" onclick="goToProductDetail(${product.id})">
             <div class="product-image" style="background-image: url('${product.icon}')"></div>
             <div class="product-info">
                 <h3>${product.name}</h3>
@@ -215,8 +185,8 @@ function createProductCard(product) {
                         ${product.shades.map(shade => `<span class="shade-item">${shade}</span>`).join('')}
                     </div>
                 </div>
-                <div class="product-price">${product.price} ريال</div>
-                <button class="add-to-cart" onclick="addToCart(${product.id})">
+                <div class="product-price">${product.price} شيقل</div>
+                <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
                     <i class="fas fa-shopping-bag"></i> أضيفي للسلة
                 </button>
             </div>
@@ -224,7 +194,12 @@ function createProductCard(product) {
     `;
 }
 
-// Update loadFeaturedProducts function
+// Function to navigate to product detail page
+function goToProductDetail(productId) {
+    window.location.href = `products-details.html?id=${productId}`;
+}
+
+// Load featured products on home page
 function loadFeaturedProducts() {
     const featuredContainer = document.getElementById('featuredProducts');
     if (!featuredContainer) return;
@@ -233,7 +208,7 @@ function loadFeaturedProducts() {
     featuredContainer.innerHTML = featuredProducts.map(product => createProductCard(product)).join('');
 }
 
-// Update loadAllProducts function
+// Load all products on products page
 function loadAllProducts() {
     const productsContainer = document.getElementById('allProducts');
     if (!productsContainer) return;
@@ -241,7 +216,7 @@ function loadAllProducts() {
     productsContainer.innerHTML = products.map(product => createProductCard(product)).join('');
 }
 
-// Update filterProducts function
+// Filter products by category
 function filterProducts(category) {
     const productsContainer = document.getElementById('allProducts');
     if (!productsContainer) return;
@@ -253,18 +228,23 @@ function filterProducts(category) {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
     });
-    document.querySelector(`[onclick="filterProducts('${category}')"]`).classList.add('active');
+    const activeBtn = document.querySelector(`[onclick="filterProducts('${category}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
 }
 
-// Cart functionality
+// Cart functionality with enhanced features for shades and delivery
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+let selectedDelivery = localStorage.getItem('selectedDelivery') || null;
+let deliveryPrice = parseInt(localStorage.getItem('deliveryPrice') || '0');
 
 // Mobile menu toggle
+// Replace the toggleMenu function in your script.js with this:
+
 function toggleMenu() {
-    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.getElementById('navLinks'); // or document.querySelector('.nav-links')
     const hamburger = document.querySelector('.hamburger');
     
-    navMenu.classList.toggle('active');
+    navLinks.classList.toggle('active');
     hamburger.classList.toggle('active');
 }
 
@@ -274,11 +254,11 @@ function toggleCart() {
     cartSidebar.classList.toggle('open');
 }
 
-// Add to cart function
+// Enhanced add to cart function
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
     if (product) {
-        const existingItem = cart.find(item => item.id === productId);
+        const existingItem = cart.find(item => item.id === productId && !item.selectedShade);
         
         if (existingItem) {
             existingItem.quantity += 1;
@@ -288,24 +268,28 @@ function addToCart(productId) {
         
         updateCart();
         saveCart();
-        
-        // Show success animation
         showAddToCartSuccess();
     }
 }
 
-// Remove from cart
-function removeFromCart(productId) {
-    cart = cart.filter(item => item.id !== productId);
+// Enhanced remove from cart function
+function removeFromCart(productId, selectedShade = '') {
+    if (selectedShade) {
+        cart = cart.filter(item => !(item.id === productId && item.selectedShade === selectedShade));
+    } else {
+        cart = cart.filter(item => item.id !== productId);
+    }
     updateCart();
     saveCart();
 }
 
-// Update cart display
+// Enhanced update cart display with delivery info
 function updateCart() {
     const cartCount = document.getElementById('cartCount');
     const cartItems = document.getElementById('cartItems');
     const cartTotal = document.getElementById('cartTotal');
+    
+    if (!cartCount || !cartItems || !cartTotal) return;
     
     // Update cart count
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -323,12 +307,13 @@ function updateCart() {
     } else {
         cartItems.innerHTML = cart.map(item => `
             <div class="cart-item">
-                <div class="cart-item-image">${item.icon}</div>
+                <div class="cart-item-image" style="background-image: url('${item.icon}')"></div>
                 <div class="cart-item-info">
                     <h4>${item.name}</h4>
+                    ${item.selectedShade ? `<p style="color: #ff69b4; font-size: 0.9rem;">اللون: ${item.selectedShade}</p>` : ''}
                     <p>${item.price} شيقل × ${item.quantity}</p>
                 </div>
-                <button class="remove-item" onclick="removeFromCart(${item.id})">
+                <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedShade || ''}')">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -338,16 +323,29 @@ function updateCart() {
     // Update total
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     cartTotal.textContent = total;
+    
+    // Update delivery info if available
+    const deliveryInfo = document.getElementById('deliveryInfo');
+    const finalTotal = document.getElementById('finalTotal');
+    
+    if (deliveryInfo && selectedDelivery) {
+        deliveryInfo.style.display = 'block';
+        document.getElementById('deliveryPrice').textContent = deliveryPrice;
+        if (finalTotal) {
+            finalTotal.textContent = total + deliveryPrice;
+        }
+    }
 }
 
-// Save cart to localStorage
+// Save cart and delivery info to localStorage
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('selectedDelivery', selectedDelivery);
+    localStorage.setItem('deliveryPrice', deliveryPrice.toString());
 }
 
-// Show add to cart success
+// Show add to cart success message
 function showAddToCartSuccess() {
-    // Create success message
     const message = document.createElement('div');
     message.style.cssText = `
         position: fixed;
@@ -367,12 +365,10 @@ function showAddToCartSuccess() {
     
     document.body.appendChild(message);
     
-    // Animate in
     setTimeout(() => {
         message.style.transform = 'translateX(0)';
     }, 100);
     
-    // Remove after 3 seconds
     setTimeout(() => {
         message.style.transform = 'translateX(400px)';
         setTimeout(() => {
@@ -381,8 +377,39 @@ function showAddToCartSuccess() {
     }, 3000);
 }
 
-// Show contact message when checkout is clicked
+// Enhanced contact message with order details including delivery
 function showContactMessage() {
+    if (cart.length === 0) {
+        alert('سلة التسوق فارغة!');
+        return;
+    }
+    
+    // Create order summary
+    let orderSummary = 'طلبي:\n';
+    let total = 0;
+    
+    cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        orderSummary += `- ${item.name}`;
+        if (item.selectedShade) {
+            orderSummary += ` (${item.selectedShade})`;
+        }
+        orderSummary += ` × ${item.quantity} = ${itemTotal} شيقل\n`;
+    });
+    
+    // Add delivery if selected
+    if (selectedDelivery && deliveryPrice > 0) {
+        const deliveryText = selectedDelivery === 'westbank' ? 'التوصيل للضفة الغربية' : 
+                           selectedDelivery === 'jerusalem' ? 'التوصيل للقدس' : 'استلام من الجامعة';
+        orderSummary += `\n${deliveryText}: ${deliveryPrice} شيقل`;
+        total += deliveryPrice;
+    } else if (selectedDelivery === 'pickup') {
+        orderSummary += '\nاستلام من الجامعة: مجاني';
+    }
+    
+    orderSummary += `\nالمجموع النهائي: ${total} شيقل`;
+    
     const message = document.createElement('div');
     message.style.cssText = `
         position: fixed;
@@ -411,21 +438,31 @@ function showContactMessage() {
             <i class="fab fa-instagram" style="font-size: 4rem; color: #ff1493; margin-bottom: 20px;"></i>
             <h2 style="color: #ff1493; margin-bottom: 20px; font-size: 1.8rem;">إتمام الطلب</h2>
             <p style="color: #666; margin-bottom: 25px; line-height: 1.6; font-size: 1.1rem;">
-                لإتمام طلبكِ، يرجى التواصل معنا عبر الانستغرام<br>
-                @layansbeautyshop
+                لإتمام طلبكِ، يرجى التواصل معنا عبر الانستغرام مع تفاصيل طلبكِ
             </p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <a href="https://www.instagram.com/layansbeautyshop/" style="
-    background: linear-gradient(135deg, #ff1493, #ff69b4);
-    color: white;
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: 600;
-    transition: transform 0.3s ease;
-" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-    <i class="fab fa-instagram"></i> تواصلي معنا
-</a>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://www.instagram.com/layansbeautyshop/" target="_blank" style="
+                    background: linear-gradient(135deg, #ff1493, #ff69b4);
+                    color: white;
+                    padding: 12px 25px;
+                    text-decoration: none;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    transition: transform 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <i class="fab fa-instagram"></i> تواصلي معنا
+                </a>
+                <button onclick="copyOrderSummary('${orderSummary.replace(/'/g, "\\'")}'); closeContactMessage();" style="
+                    background: #28a745;
+                    color: white;
+                    padding: 12px 25px;
+                    border: none;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    cursor: pointer;
+                ">
+                    نسخ تفاصيل الطلب
+                </button>
                 <button onclick="closeContactMessage()" style="
                     background: transparent;
                     color: #666;
@@ -450,6 +487,22 @@ function showContactMessage() {
     });
 }
 
+// Copy order summary to clipboard
+function copyOrderSummary(orderSummary) {
+    navigator.clipboard.writeText(orderSummary.replace(/\\n/g, '\n')).then(() => {
+        alert('تم نسخ تفاصيل الطلب! الآن يمكنك لصقها في رسالة الانستغرام');
+    }).catch(() => {
+        // Fallback for browsers that don't support clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = orderSummary.replace(/\\n/g, '\n');
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        alert('تم نسخ تفاصيل الطلب! الآن يمكنك لصقها في رسالة الانستغرام');
+    });
+}
+
 // Close contact message
 function closeContactMessage() {
     const message = document.querySelector('[style*="rgba(0, 0, 0, 0.8)"]');
@@ -461,36 +514,11 @@ function closeContactMessage() {
     }
 }
 
-// Load featured products on home page
-
-
-// Filter products by category
-function filterProducts(category) {
-    const productsContainer = document.getElementById('allProducts');
-    if (!productsContainer) return;
-    
-    const allProducts = getAllProducts();
-    const filteredProducts = category === 'الكل' ? allProducts : allProducts.filter(p => p.category === category);
-    
-    // Use createProductCard function (which handles images properly)
-    productsContainer.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
-    
-    // Update active filter button
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    const activeBtn = document.querySelector(`[onclick="filterProducts('${category}')"]`);
-    if (activeBtn) activeBtn.classList.add('active');
-}
-
 // Contact form submission
 function submitContactForm(event) {
     event.preventDefault();
     
     const form = event.target;
-    const formData = new FormData(form);
-    
-    // Show success message
     const message = document.createElement('div');
     message.style.cssText = `
         position: fixed;
@@ -521,11 +549,10 @@ function submitContactForm(event) {
         }, 300);
     }, 3000);
     
-    // Reset form
     form.reset();
 }
 
-// Add CSS animations
+// Add CSS animations and clickable card styles
 const style = document.createElement('style');
 style.textContent = `
     @keyframes fadeIn {
@@ -548,6 +575,43 @@ style.textContent = `
     
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
+    }
+    
+    /* Make product cards clickable */
+    .product-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 25px 50px rgba(255, 20, 147, 0.3);
+    }
+    
+    /* Prevent button from triggering card click */
+    .product-card .add-to-cart {
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Add a subtle indicator that cards are clickable */
+    .product-card::after {
+        content: "انقري للتفاصيل";
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 20, 147, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .product-card:hover::after {
+        opacity: 1;
     }
 `;
 document.head.appendChild(style);
